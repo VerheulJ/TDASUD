@@ -38,8 +38,7 @@
 - **Ethical Approval:** Approved by the Andalusian Regional Ethics Committee.
 - **Confidentiality:** All participant data are anonymized following GDPR regulations.
 
-## 8. Citation
-not yet 
----
-**For further inquiries, please contact:** Julia Verheul-Campos 
+
+
+
 
