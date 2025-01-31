@@ -4,29 +4,23 @@ library(openxlsx)
 library(ggplot2)
 library(pROC)
 
-# Load selected biomarker combinations from an Excel file
+# Load biomarker combinations from provided Excel files
 modelo1 <- read_excel("path/to/modelo1.xlsx")
 modelo2 <- read_excel("path/to/modelo2.xlsx")
 
-selected_combinations <- c("modelo5", "modelo7")
-
-# Extract biomarkers for each selected combination
-combinations <- lapply(selected_combinations, function(comb) {
-  biomarkers <- combinations_df$Biomarcadores[combinations_df$Combinacion == comb]
-  unlist(strsplit(biomarkers, ","))
-})
-
-# Load biomarker data
-biomarker_data <- read_excel("path/to/biomarker_data.xlsx")
+# Define covariate and response variable
 covariate <- c("BMI")  # Covariate to adjust for
 response_variable <- "Grupo"  # Dependent variable
 
+# Combine the two models
+combinations <- list(modelo1, modelo2)
+
 for (i in 1:length(combinations)) {
   
-  explanatory_variables <- trimws(combinations[[i]])
+  explanatory_variables <- trimws(combinations[[i]]$Biomarcadores)
   
   # Prepare dataset
-  model_data <- biomarker_data[, c(response_variable, explanatory_variables, covariate)]
+  model_data <- combinations[[i]][, c(response_variable, explanatory_variables, covariate)]
   model_data <- na.omit(model_data)  # Remove missing values
   
   # Normalize features
@@ -103,7 +97,7 @@ for (i in 1:length(combinations)) {
   
   # Save results if accuracy threshold is met
   if (accuracy > 0.65) {
-    output_file <- paste0("results_combination_", i, ".txt")
+    output_file <- paste0("results_model_", i, ".txt")
     sink(output_file)
     cat("### Elastic Net Model - Results ###\n\n")
     print(elastic_net_model)
@@ -130,10 +124,10 @@ for (i in 1:length(combinations)) {
     cat("AUC:", auc_value, "\n")
     sink()
     
-    print(paste("Combination", i, "processed and results saved in", output_file))
+    print(paste("Model", i, "processed and results saved in", output_file))
   } else {
-    print(paste("Combination", i, "processed but accuracy is below 0.65 (", accuracy, ")"))
+    print(paste("Model", i, "processed but accuracy is below 0.65 (", accuracy, ")"))
   }
 }
 
-print("Analysis completed for all selected combinations.")
+print("Analysis completed for both models.")
