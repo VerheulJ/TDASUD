@@ -20,6 +20,7 @@
 - **Origin:** Data originates from a multicenter Spanish cohort recruited from outpatient treatment programs for alcohol and cocaine addiction.
 - **Variables:**
   - **Dependent Variable:** SUD group classification (Control, SUD, SUD+ADHD).
+    - **Covariable:** BMI.
   - **Independent Variables:** Plasma concentrations of 12 lipids (2-AG, 2-LG, 2-OG, AEA, DEA, DGLEA, DHEA, LEA, OEA, PEA, POEA, SEA).
 
 
