@@ -7,6 +7,7 @@ library(pROC)
 # Load biomarker combinations from provided Excel files
 modelo1 <- read_excel("path/to/modelo1.xlsx")
 modelo2 <- read_excel("path/to/modelo2.xlsx")
+modelo3 <- read_excel("path/to/modelo3.xlsx")
 
 # Define covariate and response variable
 covariate <- c("BMI")  # Covariate to adjust for
@@ -41,18 +42,19 @@ for (i in 1:length(combinations)) {
   
   # Train-test split (80-20%)
   set.seed(123)
-  train_index <- createDataPartition(residuals_data$Grupo, p = 0.8, list = FALSE)
-  train_data <- residuals_data[train_index, , drop = FALSE]
-  test_data <- residuals_data[-train_index, , drop = FALSE]
+    set.seed(123)
+  train_index <- createDataPartition(residuos$Grupo, p = 0.8, list = FALSE)
+  train_data <- residuos[train_index, , drop = FALSE]
+  test_data <- residuos[-train_index, , drop = FALSE]
+
+  cat_x0 <- train_data[train_data$Grupo == "X0", ]  
+  cat_x1 <- train_data[train_data$Grupo == "X1", ]  
+  cat_x2 <- train_data[train_data$Grupo == "X2", ]  
   
-  # Balance training data via oversampling
-  set.seed(123)
-  over_x0 <- train_data[train_data$Grupo == "X0", ]
-  over_x2 <- train_data[train_data$Grupo == "X2", ]
-  over_x0 <- over_x0[sample(1:nrow(over_x0), size = 136, replace = TRUE), ]
-  over_x2 <- over_x2[sample(1:nrow(over_x2), size = 136, replace = TRUE), ]
-  under_x1 <- train_data[train_data$Grupo == "X1", ]
-  balanced_train_data <- rbind(over_x0, under_x1, over_x2)
+  cat_x1 <- cat_x1[sample(1:nrow(cat_x1), size = 100, replace = FALSE), ]  
+  cat_x2 <- cat_x2[sample(1:nrow(cat_x2), size = 100, replace = TRUE), ]  
+  train_data_balanced <- rbind(cat_x0, cat_x1, cat_x2)
+  
   
   # Set up cross-validation
   control <- trainControl(
