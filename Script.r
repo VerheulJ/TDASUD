@@ -14,7 +14,7 @@ covariate <- c("BMI")  # Covariate to adjust for
 response_variable <- "Grupo"  # Dependent variable
 
 # Combine the two models
-combinations <- list(modelo1, modelo2)
+combinations <- list(modelo1, modelo2, modelo3)
 
 for (i in 1:length(combinations)) {
   
